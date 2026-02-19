@@ -18,10 +18,10 @@ services:
       ollama:
         condition: service_healthy
     environment:
-      GEN_FEEDBACK_OLLAMA_URL: "http://ollama:11434"
-      GEN_FEEDBACK_OLLAMA_MODEL: "${GEN_FEEDBACK_OLLAMA_MODEL:-llama3.2}"
-      GEN_FEEDBACK_MAX_COMMITS: "${GEN_FEEDBACK_MAX_COMMITS:-20}"
-      GEN_FEEDBACK_MAX_DIFF_CHARS: "${GEN_FEEDBACK_MAX_DIFF_CHARS:-8000}"
+      FEEDY_OLLAMA_URL: "http://ollama:11434"
+      FEEDY_OLLAMA_MODEL: "${FEEDY_OLLAMA_MODEL:-llama3.2}"
+      FEEDY_MAX_COMMITS: "${FEEDY_MAX_COMMITS:-20}"
+      FEEDY_MAX_DIFF_CHARS: "${FEEDY_MAX_DIFF_CHARS:-8000}"
     # Mount the developer's current project into /repo so git commands work
     volumes:
       - "${GEN_FEEDBACK_REPO_PATH:-.}:/repo:ro"
