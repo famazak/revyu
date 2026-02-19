@@ -26,6 +26,8 @@ def _run(args: list[str], cwd: str | None = None) -> str:
     if result.returncode != 0:
         raise GitError(result.stderr.strip() or f"Command failed: {' '.join(args)}")
 
+    return result.stdout.strip()
+
 
 def collect(
     base_branch: str | None = None,

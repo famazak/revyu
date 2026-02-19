@@ -3,7 +3,7 @@ FROM python:3.13-slim AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /usr/local/bin/uv
 
 WORKDIR /app
-COPY pyproject.toml ./
+COPY pyproject.toml README.md ./
 COPY src/ ./src/
 
 RUN uv build --wheel --out-dir /dist
@@ -19,5 +19,4 @@ RUN pip install --no-cache-dir /tmp/*.whl && rm /tmp/*.whl
 WORKDIR /repo
 
 ENTRYPOINT ["feedy"]
-CMD ["--help"]
 
