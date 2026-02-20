@@ -66,7 +66,7 @@ def collect(
     )
 
     full_diff = _run(
-        ["git", "diff", "--name-only", f"{base_branch}...{current_branch}"], cwd
+        ["git", "diff", f"{base_branch}...{current_branch}"], cwd
     )
 
     if len(full_diff) > max_diff_chars:
