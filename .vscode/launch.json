@@ -1,0 +1,83 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Revyu: Run CLI",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "revyu.cli",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "args": []
+    },
+    {
+      "name": "Revyu: Run CLI (with args)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "revyu.cli",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "args": ["--repo", "${input:repoPath}", "--base-branch", "${input:baseBranch}"]
+    },
+    {
+      "name": "Debug Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${file}",
+      "console": "integratedTerminal",
+      "justMyCode": true,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      }
+    },
+    {
+      "name": "Debug Tests (pytest)",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "args": ["-xvs"]
+    },
+    {
+      "name": "Debug Tests: Current File",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "pytest",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "cwd": "${workspaceFolder}",
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}/src"
+      },
+      "args": ["-xvs", "${file}"]
+    }
+  ],
+  "inputs": [
+    {
+      "id": "repoPath",
+      "description": "Path to the git repository to analyze",
+      "type": "promptString",
+      "default": "."
+    },
+    {
+      "id": "baseBranch",
+      "description": "Base branch to diff against",
+      "type": "promptString",
+      "default": "main"
+    }
+  ]
+}
