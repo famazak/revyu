@@ -1,11 +1,11 @@
-# Feedy
+# Revyu
 
-AI-powered local code reviews for your feature branches. Feedy is a CLI tool that analyzes your git branch diff and provides structured, actionable feedback using a locally hosted LLM via [Ollama](https://ollama.com) — no code ever leaves your machine.
+AI-powered local code reviews for your feature branches. Revyu is a CLI tool that analyzes your git branch diff and provides structured, actionable feedback using a locally hosted LLM via [Ollama](https://ollama.com) — no code ever leaves your machine.
 
 ## Features
 
 - **Local-first** — All analysis happens on your machine using Ollama. Your code stays private.
-- **Auto-detection** — Automatically detects the base branch (`main`, `master`, `develop`, etc.) so you can just run `feedy` and go.
+- **Auto-detection** — Automatically detects the base branch (`main`, `master`, `develop`, etc.) so you can just run `revyu` and go.
 - **Structured feedback** — Issues are categorized by severity (CRITICAL, HIGH, MEDIUM, LOW, NIT) across security, correctness, code quality, and performance.
 - **Rich terminal output** — Feedback is rendered as styled Markdown panels in your terminal.
 - **Configurable** — Control the model, diff size limits, commit count, and more via environment variables or a `.env` file.
@@ -34,31 +34,31 @@ AI-powered local code reviews for your feature branches. Feedy is a CLI tool tha
 
 ```bash
 # With uv (recommended)
-uv tool install feedy
+uv tool install revyu
 
 # Or with pip
-pip install feedy
+pip install revyu
 ```
 
 Then run it from any git repository on a feature branch:
 
 ```bash
-feedy
+revyu
 ```
 
 ## Usage with Docker (no Python required)
 
-If you don't have Python installed, you can run Feedy entirely via Docker. There are two approaches depending on whether you already have Ollama running.
+If you don't have Python installed, you can run Revyu entirely via Docker. There are two approaches depending on whether you already have Ollama running.
 
 ### Option A: You already have Ollama running
 
-If Ollama is running on your host machine (e.g. via `brew install ollama` or the [Ollama desktop app](https://ollama.com/download)), you can run Feedy directly from your project's root directory:
+If Ollama is running on your host machine (e.g. via `brew install ollama` or the [Ollama desktop app](https://ollama.com/download)), you can run Revyu directly from your project's root directory:
 
 ```bash
 docker run --rm \
   -v "$(pwd):/repo:ro" \
-  -e FEEDY_OLLAMA_URL=http://host.docker.internal:11434 \
-  ghcr.io/<your-org>/feedy:latest
+  -e REVYU_OLLAMA_URL=http://host.docker.internal:11434 \
+  ghcr.io/<your-org>/revyu:latest
 ```
 
 `host.docker.internal` allows the container to reach Ollama on your host machine. Pass any CLI flags after the image name:
@@ -66,55 +66,55 @@ docker run --rm \
 ```bash
 docker run --rm \
   -v "$(pwd):/repo:ro" \
-  -e FEEDY_OLLAMA_URL=http://host.docker.internal:11434 \
-  ghcr.io/<your-org>/feedy:latest \
+  -e REVYU_OLLAMA_URL=http://host.docker.internal:11434 \
+  ghcr.io/<your-org>/revyu:latest \
   --base-branch develop --model codellama
 ```
 
 To simplify repeated use, add a shell alias to your profile (`~/.bashrc`, `~/.zshrc`, etc.):
 
 ```bash
-alias feedy='docker run --rm -v "$(pwd):/repo:ro" -e FEEDY_OLLAMA_URL=http://host.docker.internal:11434 ghcr.io/<your-org>/feedy:latest'
+alias revyu='docker run --rm -v "$(pwd):/repo:ro" -e REVYU_OLLAMA_URL=http://host.docker.internal:11434 ghcr.io/<your-org>/revyu:latest'
 ```
 
 Then just run:
 
 ```bash
 cd ~/projects/myapp
-feedy
-feedy --base-branch develop
-feedy --model codellama --no-diff
+revyu
+revyu --base-branch develop
+revyu --model codellama --no-diff
 ```
 
 ### Option B: Run everything with Docker Compose
 
-If you don't have Ollama installed at all, the included `docker-compose.yml` runs both Ollama and Feedy together:
+If you don't have Ollama installed at all, the included `docker-compose.yml` runs both Ollama and Revyu together:
 
 ```bash
-# Clone feedy (only needed once, for the docker-compose.yml)
-git clone https://github.com/<your-org>/feedy.git ~/feedy
+# Clone revyu (only needed once, for the docker-compose.yml)
+git clone https://github.com/<your-org>/revyu.git ~/revyu
 
 # Start the Ollama service
-docker compose -f ~/feedy/docker-compose.yml up -d
+docker compose -f ~/revyu/docker-compose.yml up -d
 
-# Run feedy against your project
+# Run revyu against your project
 GEN_FEEDBACK_REPO_PATH=/path/to/your/repo \
-  docker compose -f ~/feedy/docker-compose.yml run --rm feedy
+  docker compose -f ~/revyu/docker-compose.yml run --rm revyu
 ```
 
-The `feedy` service is under the `tools` profile, so it only runs on demand via `docker compose run` — it won't start with a bare `docker compose up`.
+The `revyu` service is under the `tools` profile, so it only runs on demand via `docker compose run` — it won't start with a bare `docker compose up`.
 
 You can also override configuration:
 
 ```bash
-FEEDY_OLLAMA_MODEL=codellama GEN_FEEDBACK_REPO_PATH=~/projects/myapp \
-  docker compose -f ~/feedy/docker-compose.yml run --rm feedy --base-branch develop
+REVYU_OLLAMA_MODEL=codellama GEN_FEEDBACK_REPO_PATH=~/projects/myapp \
+  docker compose -f ~/revyu/docker-compose.yml run --rm revyu --base-branch develop
 ```
 
 ## CLI Usage
 
 ```
-feedy [OPTIONS]
+revyu [OPTIONS]
 ```
 
 | Option | Short | Description |
@@ -129,41 +129,41 @@ feedy [OPTIONS]
 
 ```bash
 # Review the current branch (auto-detects base branch)
-feedy
+revyu
 
 # Review against a specific base branch
-feedy --base-branch develop
+revyu --base-branch develop
 
 # Use a different model
-feedy --model codellama
+revyu --model codellama
 
 # Review a repo in another directory
-feedy --repo ~/projects/myapp
+revyu --repo ~/projects/myapp
 
 # Skip the full diff for very large branches
-feedy --no-diff
+revyu --no-diff
 ```
 
 ## Configuration
 
-Feedy is configured via environment variables (prefixed with `FEEDY_`) or a `.env` file in the working directory.
+Revyu is configured via environment variables (prefixed with `REVYU_`) or a `.env` file in the working directory.
 
 | Variable | Default | Description |
 |---|---|---|
-| `FEEDY_OLLAMA_URL` | `http://localhost:11434` | Ollama server URL. |
-| `FEEDY_OLLAMA_MODEL` | `llama3.2` | Default Ollama model. |
-| `FEEDY_OLLAMA_TIMEOUT` | `120.0` | Request timeout in seconds. |
-| `FEEDY_MAX_COMMITS` | `20` | Maximum number of commits to include in the review. |
-| `FEEDY_MAX_DIFF_CHARS` | `8000` | Maximum diff size in characters. Fails if exceeded. |
+| `REVYU_OLLAMA_URL` | `http://localhost:11434` | Ollama server URL. |
+| `REVYU_OLLAMA_MODEL` | `llama3.2` | Default Ollama model. |
+| `REVYU_OLLAMA_TIMEOUT` | `120.0` | Request timeout in seconds. |
+| `REVYU_MAX_COMMITS` | `20` | Maximum number of commits to include in the review. |
+| `REVYU_MAX_DIFF_CHARS` | `8000` | Maximum diff size in characters. Fails if exceeded. |
 
 Example `.env` file:
 
 ```env
-FEEDY_OLLAMA_URL=http://localhost:11434
-FEEDY_OLLAMA_MODEL=codellama
-FEEDY_OLLAMA_TIMEOUT=180
-FEEDY_MAX_COMMITS=30
-FEEDY_MAX_DIFF_CHARS=12000
+REVYU_OLLAMA_URL=http://localhost:11434
+REVYU_OLLAMA_MODEL=codellama
+REVYU_OLLAMA_TIMEOUT=180
+REVYU_MAX_COMMITS=30
+REVYU_MAX_DIFF_CHARS=12000
 ```
 
 ## Development Setup
@@ -171,14 +171,14 @@ FEEDY_MAX_DIFF_CHARS=12000
 ### Clone and install
 
 ```bash
-git clone https://github.com/<your-org>/feedy.git
-cd feedy
+git clone https://github.com/<your-org>/revyu.git
+cd revyu
 
 # Install dependencies (creates a virtual environment automatically)
 uv sync
 
-# Run feedy locally
-uv run feedy
+# Run revyu locally
+uv run revyu
 ```
 
 ### Running tests
@@ -190,7 +190,7 @@ uv run pytest
 ### Project structure
 
 ```
-src/feedy/
+src/revyu/
   cli.py        # CLI entrypoint (Typer app)
   git.py        # Git operations — branch detection, diff collection
   llm.py        # Ollama integration — prompt building, API calls
@@ -281,18 +281,18 @@ The tag push triggers the GitHub Actions workflow, which builds and publishes to
 
 ```bash
 # Build the image
-docker build -t feedy .
+docker build -t revyu .
 
 # Tag for GHCR
-docker tag feedy ghcr.io/<your-org>/feedy:latest
-docker tag feedy ghcr.io/<your-org>/feedy:0.1.0
+docker tag revyu ghcr.io/<your-org>/revyu:latest
+docker tag revyu ghcr.io/<your-org>/revyu:0.1.0
 
 # Authenticate with GHCR
 echo $GITHUB_TOKEN | docker login ghcr.io -u <your-username> --password-stdin
 
 # Push
-docker push ghcr.io/<your-org>/feedy:latest
-docker push ghcr.io/<your-org>/feedy:0.1.0
+docker push ghcr.io/<your-org>/revyu:latest
+docker push ghcr.io/<your-org>/revyu:0.1.0
 ```
 
 ### Automated publish with GitHub Actions
@@ -339,7 +339,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
 ```
 
-This workflow triggers on version tags, builds the Docker image, and pushes it to `ghcr.io/<your-org>/feedy` with semantic version tags.
+This workflow triggers on version tags, builds the Docker image, and pushes it to `ghcr.io/<your-org>/revyu` with semantic version tags.
 
 ## License
 

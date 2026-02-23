@@ -12,7 +12,7 @@ from .llm import LLMError, get_feedback
 from .settings import settings
 
 app = typer.Typer(
-    name="feedy",
+    name="revyu",
     help="AI-powered git branch feedback from your local LLM.",
     add_completion=False,
 )

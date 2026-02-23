@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     max_commits: int = 20
     max_diff_chars: int = 8000
 
-    model_config = SettingsConfigDict(env_file=".env", env_prefix="FEEDY_")
+    model_config = SettingsConfigDict(env_file=".env", env_prefix="REVYU_")
 
 
 settings = Settings()

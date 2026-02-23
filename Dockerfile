@@ -18,5 +18,5 @@ RUN pip install --no-cache-dir /tmp/*.whl && rm /tmp/*.whl
 
 WORKDIR /repo
 
-ENTRYPOINT ["feedy"]
+ENTRYPOINT ["revyu"]
 

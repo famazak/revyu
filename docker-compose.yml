@@ -12,16 +12,16 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  feedy:
+  revyu:
     build: .
     depends_on:
       ollama:
         condition: service_healthy
     environment:
-      FEEDY_OLLAMA_URL: "http://ollama:11434"
-      FEEDY_OLLAMA_MODEL: "${FEEDY_OLLAMA_MODEL:-llama3.2}"
-      FEEDY_MAX_COMMITS: "${FEEDY_MAX_COMMITS:-20}"
-      FEEDY_MAX_DIFF_CHARS: "${FEEDY_MAX_DIFF_CHARS:-8000}"
+      REVYU_OLLAMA_URL: "http://ollama:11434"
+      REVYU_OLLAMA_MODEL: "${REVYU_OLLAMA_MODEL:-llama3.2}"
+      REVYU_MAX_COMMITS: "${REVYU_MAX_COMMITS:-20}"
+      REVYU_MAX_DIFF_CHARS: "${REVYU_MAX_DIFF_CHARS:-8000}"
     # Mount the developer's current project into /repo so git commands work
     volumes:
       - "${GEN_FEEDBACK_REPO_PATH:-.}:/repo:ro"

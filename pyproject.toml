@@ -1,5 +1,5 @@
 [project]
-name = "feedy"
+name = "revyu"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -18,7 +18,7 @@ dependencies = [
 ]
 
 [project.scripts]
-feedy = "feedy.cli:app"
+revyu = "revyu.cli:app"
 
 [build-system]
 requires = ["hatchling"]
